@@ -1,0 +1,88 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Fast Subnet Calculator";
+}
+
+<div class="text-center mb-5">
+    <h1 class="display-4">Subnet Calculator</h1>
+    <p class="lead">Calcola velocemente subnet mask, broadcast e host range.</p>
+</div>
+
+<div class="row justify-content-center">
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <form method="post">
+                    <div class="mb-3">
+                        <label asp-for="InputIP" class="form-label">Indirizzo IP</label>
+                        <input asp-for="InputIP" class="form-control" placeholder="es. 192.168.1.10" />
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Cidr" class="form-label">CIDR / Prefix Length (0-32)</label>
+                        <input asp-for="Cidr" class="form-control" type="number" min="0" max="32" />
+                        <div class="form-text">Esempio: 24 per 255.255.255.0</div>
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary btn-lg">Calcola Subnet</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        @if (Model.ErrorMessage != null)
+        {
+            <div class="alert alert-danger mt-4" role="alert">
+                @Model.ErrorMessage
+            </div>
+        }
+
+        @if (Model.Result != null)
+        {
+            <div class="card mt-4 shadow-sm border-primary">
+                <div class="card-header bg-primary text-white">
+                    Risultati per @Model.Result.IP @Model.Result.Cidr
+                </div>
+                <div class="card-body p-0">
+                    <table class="table table-striped table-hover mb-0">
+                        <tbody>
+                            <tr>
+                                <th scope="row" class="w-50 ps-4">Indirizzo IP</th>
+                                <td>@Model.Result.IP</td>
+                            </tr>
+                            <tr>
+                                <th scope="row" class="ps-4">Subnet Mask</th>
+                                <td>@Model.Result.Mask</td>
+                            </tr>
+                            <tr>
+                                <th scope="row" class="ps-4">Network Address</th>
+                                <td>@Model.Result.Network</td>
+                            </tr>
+                            <tr>
+                                <th scope="row" class="ps-4">Broadcast Address</th>
+                                <td>@Model.Result.Broadcast</td>
+                            </tr>
+                            <tr>
+                                <th scope="row" class="ps-4">Primo Host Utilizzabile</th>
+                                <td>@Model.Result.FirstHost</td>
+                            </tr>
+                            <tr>
+                                <th scope="row" class="ps-4">Ultimo Host Utilizzabile</th>
+                                <td>@Model.Result.LastHost</td>
+                            </tr>
+                            <tr>
+                                <th scope="row" class="ps-4">Totale Host</th>
+                                <td>@Model.Result.TotalHosts</td>
+                            </tr>
+                            <tr>
+                                <th scope="row" class="ps-4 text-primary">Numero Host (Offset)</th>
+                                <td class="fw-bold text-primary">@Model.Result.HostNumber</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        }
+    </div>
+</div>
