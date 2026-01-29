@@ -19,6 +19,9 @@ public class IndexModel : PageModel
     [BindProperty]
     public int Cidr { get; set; } = 24;
 
+    [BindProperty]
+    public int? TargetHost { get; set; }
+
     public SubnetResult? Result { get; set; }
     public string? ErrorMessage { get; set; }
 
@@ -36,7 +39,7 @@ public class IndexModel : PageModel
                 return;
             }
 
-            Result = SubnetHelper.Calculate(InputIP, Cidr);
+            Result = SubnetHelper.Calculate(InputIP, Cidr, TargetHost);
         }
         catch (Exception ex)
         {

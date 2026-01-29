@@ -24,8 +24,13 @@
                         <input asp-for="Cidr" class="form-control" type="number" min="0" max="32" />
                         <div class="form-text">Esempio: 24 per 255.255.255.0</div>
                     </div>
+                    <div class="mb-3">
+                        <label asp-for="TargetHost" class="form-label">Genera Host Numero (Opzionale)</label>
+                        <input asp-for="TargetHost" class="form-control" type="number" min="1" placeholder="es. 10" />
+                        <div class="form-text">Calcola l'IP corrispondente a questo numero di host.</div>
+                    </div>
                     <div class="d-grid">
-                        <button type="submit" class="btn btn-primary btn-lg">Calcola Subnet</button>
+                        <button type="submit" class="btn btn-primary btn-lg">Calcola</button>
                     </div>
                 </form>
             </div>
@@ -48,13 +53,24 @@
                     <table class="table table-striped table-hover mb-0">
                         <tbody>
                             <tr>
-                                <th scope="row" class="w-50 ps-4">Indirizzo IP</th>
+                                <th scope="row" class="w-50 ps-4">Indirizzo IP Fornito</th>
                                 <td>@Model.Result.IP</td>
                             </tr>
                             <tr>
                                 <th scope="row" class="ps-4">Subnet Mask</th>
                                 <td>@Model.Result.Mask</td>
                             </tr>
+                            <tr>
+                                <th scope="row" class="ps-4">Classe di Rete</th>
+                                <td>Classe @Model.Result.NetworkClass</td>
+                            </tr>
+                            @if (!string.IsNullOrEmpty(Model.Result.SubnetNumber))
+                            {
+                                <tr>
+                                    <th scope="row" class="ps-4">Posizione Subnet</th>
+                                    <td>Sottorete n. @Model.Result.SubnetNumber</td>
+                                </tr>
+                            }
                             <tr>
                                 <th scope="row" class="ps-4">Network Address</th>
                                 <td>@Model.Result.Network</td>
@@ -72,13 +88,20 @@
                                 <td>@Model.Result.LastHost</td>
                             </tr>
                             <tr>
-                                <th scope="row" class="ps-4">Totale Host</th>
+                                <th scope="row" class="ps-4">Totale Host (Usable)</th>
                                 <td>@Model.Result.TotalHosts</td>
                             </tr>
                             <tr>
-                                <th scope="row" class="ps-4 text-primary">Numero Host (Offset)</th>
-                                <td class="fw-bold text-primary">@Model.Result.HostNumber</td>
+                                <th scope="row" class="ps-4 text-primary">Posizione IP Fornito</th>
+                                <td class="fw-bold text-primary">Host n. @Model.Result.HostNumber</td>
                             </tr>
+                            @if (Model.Result.TargetHostIndex.HasValue)
+                            {
+                                <tr class="table-success">
+                                    <th scope="row" class="ps-4">IP Sottorete Calcolato</th>
+                                    <td class="fw-bold">Host n. @Model.Result.TargetHostIndex &rarr; @Model.Result.TargetHostIP</td>
+                                </tr>
+                            }
                         </tbody>
                     </table>
                 </div>
